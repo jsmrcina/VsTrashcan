@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net461</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Reference Include="VintagestoryAPI">
+            <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\VintagestoryAPI.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="VSEssentials">
+            <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSEssentials.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="VSSurvivalMod">
+            <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSSurvivalMod.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+        <Reference Include="VSCreativeMod">
+            <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSCreativeMod.dll</HintPath>
+            <Private>false</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+        <None Include="LICENSE" CopyToOutputDirectory="PreserveNewest" />
+        <None Include="resources/**">
+            <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <Target Name="Package" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
+        <ZipDirectory DestinationFile="bin/$(TargetName).zip" SourceDirectory="$(TargetDir)"
+            Overwrite="true" />
+    </Target>
+</Project>
