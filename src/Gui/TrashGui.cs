@@ -5,11 +5,13 @@ namespace VsTrashcan
 {
     public class TrashGui : GuiDialog
     {
-        InventoryGeneric inv;
+        InventoryGeneric trashSlotInventory;
+        InventoryGeneric trashSlotFilterInventory;
 
-        public TrashGui(ICoreClientAPI capi, InventoryGeneric inv) : base(capi)
+        public TrashGui(ICoreClientAPI capi, InventoryGeneric trashSlotInventory, InventoryGeneric trashSlotFilterInventory) : base(capi)
         {
-            this.inv = inv;
+            this.trashSlotInventory = trashSlotInventory;
+            this.trashSlotFilterInventory = trashSlotFilterInventory;
             ComposeDialog();
         }
 
@@ -20,7 +22,8 @@ namespace VsTrashcan
 
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.RightMiddle);
 
-            ElementBounds slotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 30, 1, 1);
+            ElementBounds trashSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.CenterFixed, 0, 30, 1, 1);
+            ElementBounds trashSlotFilterBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 120, 2, 2);
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(40f);
             bgBounds.BothSizing = ElementSizing.FitToChildren;
 
@@ -28,7 +31,8 @@ namespace VsTrashcan
                     .AddShadedDialogBG(bgBounds)
                     .AddDialogTitleBar("Trash")
                     .BeginChildElements(bgBounds)
-                    .AddItemSlotGrid(inv, null, 1, slotBounds)
+                    .AddItemSlotGrid(trashSlotInventory, null, 1, trashSlotBounds)
+                    .AddItemSlotGrid(trashSlotFilterInventory, null, 2, trashSlotFilterBounds)
                     .EndChildElements()
                     .Compose();
         }
