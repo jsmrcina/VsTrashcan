@@ -19,6 +19,10 @@ namespace VsTrashcan
     {
         private readonly string _trashcanChannel = "trashcanChannel";
 
+        private readonly int _numTrashFilterRows = 4;
+        private readonly int _numTrashFilterCols = 4;
+        private readonly int _numTrashFilterSlots;
+
         // Client
         private InventoryGeneric _trashSlotInv;
         private InventoryGeneric _trashSlotFilterInvClient;
@@ -32,10 +36,17 @@ namespace VsTrashcan
         private IServerNetworkChannel _serverChannel;
         private readonly int _trashFilterThreadDelay = 5;
 
+        public VsTrashcan()
+        {
+            _numTrashFilterSlots = _numTrashFilterRows * _numTrashFilterCols;
+        }
+
         // Client
         public override void StartClientSide(ICoreClientAPI api)
         {
             _clientApi = api ?? throw new ArgumentException("Client API is null");
+
+            _clientApi.RegisterItemClass("VsTrashCan", typeof(VsTrashcan));
 
             _clientChannel = api.Network.RegisterChannel(_trashcanChannel)
                             .RegisterMessageType(typeof(ClearMouseSlotMessage))
@@ -43,8 +54,7 @@ namespace VsTrashcan
                             .RegisterMessageType(typeof(InitialTrashFilterSyncMessage))
                             .SetMessageHandler<InitialTrashFilterSyncMessage>(OnInitialTrashFilterSyncMessage);
 
-
-            _trashSlotFilterInvClient = new InventoryGeneric(4, null, null);
+            _trashSlotFilterInvClient = new InventoryGeneric(_numTrashFilterSlots, null, null);
             _clientApi.Event.LevelFinalize += OnLevelFinalizeClient;
         }
 
@@ -100,6 +110,11 @@ namespace VsTrashcan
             foreach (KeyValuePair<string, InventoryGeneric> keyValue in _trashSlotFilterInvServer)
             {
                 IServerPlayer player = _serverApi.World.PlayerByUid(keyValue.Key) as IServerPlayer;
+                if (player == null)
+                {
+                    continue;
+                }
+
                 if (player.ConnectionState == EnumClientState.Playing)
                 {
                     IInventory backpack = player.InventoryManager.GetOwnInventory(GlobalConstants.backpackInvClassName);
@@ -141,7 +156,7 @@ namespace VsTrashcan
             }
             else
             {
-                _trashSlotFilterInvServer.Add(player.PlayerUID, new InventoryGeneric(4, "trashSlotFilter", player.PlayerUID, _serverApi));
+                _trashSlotFilterInvServer.Add(player.PlayerUID, new InventoryGeneric(_numTrashFilterSlots, "trashSlotFilter", player.PlayerUID, _serverApi));
             }
 
 
@@ -191,16 +206,15 @@ namespace VsTrashcan
             int index = 0;
             foreach (KeyValuePair<string, List<byte[]>> keyValuePair in serializableInventoryItems)
             {
-                InventoryGeneric playerTrashFilterInventory = new InventoryGeneric(4, "trashSlotFilter", keyValuePair.Key, _serverApi);
+                InventoryGeneric playerTrashFilterInventory = new InventoryGeneric(_numTrashFilterSlots, "trashSlotFilter", keyValuePair.Key, _serverApi);
                 foreach (byte[] itemStackAsBytes in keyValuePair.Value)
                 {
                     using (MemoryStream ms = new MemoryStream(itemStackAsBytes))
                     {
                         playerTrashFilterInventory[index].Itemstack = new ItemStack();
                         playerTrashFilterInventory[index].Itemstack.FromBytes(new BinaryReader(ms));
-                        index++;
-
                         _serverApi.Logger.Warning($"Loading trashcan filter id {playerTrashFilterInventory[index].Itemstack.Id}");
+                        index++;
                     }
                 }
 
@@ -257,7 +271,7 @@ namespace VsTrashcan
             _trashSlotFilterInvClient.SlotModified += OnTrashSlotFilterModified;
 
 
-            _dialog = new TrashGui(_clientApi, _trashSlotInv, _trashSlotFilterInvClient);
+            _dialog = new TrashGui(_clientApi, _trashSlotInv, _trashSlotFilterInvClient, _numTrashFilterRows, _numTrashFilterCols);
 
             InventoryBase backpack = _clientApi.World.Player.InventoryManager.GetOwnInventory(GlobalConstants.backpackInvClassName) as InventoryBase;
             backpack.OnInventoryOpened += OnInventoryOpened;
