@@ -15,6 +15,8 @@ namespace VsTrashcan
 
         ElementBounds trashAreaBounds;
 
+        public override bool PrefersUngrabbedMouse => false;
+
         public TrashGui(ICoreClientAPI capi, InventoryGeneric trashSlotInventory, InventoryGeneric trashSlotFilterInventory, int numTrashFilterRows, int numTrashFilterCols) : base(capi)
         {
             _numTrashFilterRows = numTrashFilterRows;
@@ -40,10 +42,6 @@ namespace VsTrashcan
         private void ComposeDialog()
         {
             ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.RightMiddle);
-            if (_clientApi.Settings.Bool["immersiveMouseMode"])
-            {
-                dialogBounds = ElementStdBounds.AutosizedMainDialog.WithAlignment(EnumDialogArea.RightBottom);
-            }
 
             trashAreaBounds = ElementBounds.Fixed(0, 0, 210, 250);
 
