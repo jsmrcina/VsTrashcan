@@ -2,13 +2,13 @@
     "type": "code",
     "name": "VsTrashcan",
     "modid": "VsTrashcan",
-    "version": "1.0.4",
+    "version": "1.0.5",
     "description": "A mod that adds a trashcan to your inventory for discarding stacks",
     "website": "https://github.com/jsmrcina/VsTrashcan",
     "authors": [
         "jsmrcina"
     ],
     "dependencies": {
-        "game": "1.18.8"
+        "game": "1.18.10"
     }
 }

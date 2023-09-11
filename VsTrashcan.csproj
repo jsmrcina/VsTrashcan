@@ -6,36 +6,39 @@
     <ItemGroup>
         <Reference Include="VintagestoryAPI">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\VintagestoryAPI.dll</HintPath>
-            <Private>false</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="VSEssentials">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSEssentials.dll</HintPath>
-            <Private>false</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="VSSurvivalMod">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSSurvivalMod.dll</HintPath>
-            <Private>false</Private>
+            <Private>False</Private>
         </Reference>
         <Reference Include="VSCreativeMod">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Mods\VSCreativeMod.dll</HintPath>
-            <Private>false</Private>
+            <Private>False</Private>
         </Reference>
         <Reference
             Include="protobuf-net, Version=3.0.0.0, Culture=neutral, PublicKeyToken=257b51d87d2e4d67, processorArchitecture=MSIL">
             <SpecificVersion>False</SpecificVersion>
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Lib\protobuf-net.dll</HintPath>
+            <Private>False</Private>
         </Reference>
         <Reference Include="Cairo">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Lib\cairo-sharp.dll</HintPath>
             <SpecificVersion>False</SpecificVersion>
+            <Private>False</Private>
         </Reference>
         <Reference Include="Newtonsoft.Json">
             <HintPath>C:\Users\jsmrc\AppData\Roaming\VintageStory\Lib\Newtonsoft.Json.dll</HintPath>
             <SpecificVersion>False</SpecificVersion>
+            <Private>False</Private>
         </Reference>
     </ItemGroup>
 
-    <ItemGroup Condition="'$(Configuration)' == 'Release'">
+    <ItemGroup>
         <None Include="LICENSE" CopyToOutputDirectory="PreserveNewest" />
         <None Include="resources/**">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -43,8 +46,8 @@
         </None>
     </ItemGroup>
 
-    <Target Name="Package" AfterTargets="PostBuildEvent" Condition="'$(Configuration)' == 'Release'">
-        <ZipDirectory DestinationFile="bin/$(TargetName).zip" SourceDirectory="$(TargetDir)"
+    <Target Name="Package" AfterTargets="PostBuildEvent">
+        <ZipDirectory DestinationFile="bin/$(Configuration)/$(TargetName).zip" SourceDirectory="$(TargetDir)"
             Overwrite="true" />
     </Target>
 </Project>

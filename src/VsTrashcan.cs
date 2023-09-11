@@ -10,7 +10,6 @@ using VsTrashcan.Models.Networking;
 
 [assembly: ModInfo("VsTrashcan",
     Description = "A mod that adds a trashcan to your inventory for discarding stacks",
-    Website = "",
     Authors = new[] { "jsmrcina" })]
 
 namespace VsTrashcan
@@ -102,6 +101,9 @@ namespace VsTrashcan
                         {
                             playerInvSlot.Itemstack = null;
                             playerInvSlot.MarkDirty();
+                            
+                            // We just discarded this item, bail out
+                            break;
                         }
                     }
                 }

@@ -1,6 +1,5 @@
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
-using Cairo;
 
 namespace VsTrashcan
 {
@@ -55,29 +54,12 @@ namespace VsTrashcan
                     .AddShadedDialogBG(bgBounds)
                     .AddDialogTitleBar("Trash")
                     .BeginChildElements(bgBounds)
-                    .AddDynamicCustomDraw(trashAreaBounds, OnBgDraw, "symbolDrawer")
                     .AddStaticText("Trash", CairoFont.WhiteDetailText(), ElementBounds.Fixed(83, 5, 100, 45), "trashText")
                     .AddItemSlotGrid(trashSlotInventory, null, 1, trashSlotBounds)
                     .AddStaticText("Auto-trash Filters", CairoFont.WhiteDetailText(), ElementBounds.Fixed(50, 90, 120, 45), "trashFilterText")
                     .AddItemSlotGrid(trashSlotFilterInventory, null, _numTrashFilterCols, trashSlotFilterBounds)
                     .EndChildElements()
                     .Compose();
-        }
-
-        private void OnBgDraw(Context ctx, ImageSurface surface, ElementBounds currentBounds)
-        {
-            double top = trashAreaBounds.fixedHeight + trashAreaBounds.fixedY;
-
-            ctx.Save();
-            Matrix m = ctx.Matrix;
-            m.Translate(GuiElement.scaled(5), GuiElement.scaled(5));
-            m.Scale(GuiElement.scaled(0.2), GuiElement.scaled(0.2));
-            ctx.Matrix = m;
-
-            var rgba = new double[] { 1, 1, 1, 1 };
-            capi.Gui.Icons.DrawIcon(ctx, "game:textures/gui/target", 100, 100, 32, 32, rgba);
-
-            ctx.Restore();
         }
     }
 }
