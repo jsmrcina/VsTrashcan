@@ -33,6 +33,29 @@
                 "-c",
                 "Release"
             ]
+        },
+        {
+            "label": "Test",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": "$msCompile",
+            "type": "process",
+            "command": "dotnet",
+            "args": [
+                "test",
+                "tests/VsTrashcan.Tests"
+            ]
+        },
+        {
+            "label": "Smoke test (dedicated server)",
+            "group": "test",
+            "type": "process",
+            "command": "bash",
+            "args": [
+                "tests/smoke/server-smoke.sh"
+            ]
         }
     ]
 }

@@ -1,0 +1,12 @@
+{
+    "type": "code",
+    "name": "VsTrashcan self-test",
+    "modid": "vstrashcanselftest",
+    "version": "1.0.0",
+    "description": "Test-only: checks VsTrashcan against every item and block on a real server",
+    "authors": [ "jsmrcina" ],
+    "dependencies": {
+        "game": "1.22.7",
+        "vstrashcan": "*"
+    }
+}

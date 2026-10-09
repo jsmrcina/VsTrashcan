@@ -2,12 +2,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch Client (Mono)",
+            "name": "Launch Client",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "Build (Debug)",
-            "program": "C:\\Users\\jsmrc\\AppData\\Roaming\\VintageStory\\Vintagestory.exe",
+            "program": "dotnet",
             "args": [
+                "${env:VINTAGE_STORY}/Vintagestory.dll",
                 "--playStyle",
                 "preset-surviveandbuild",
                 "--openWorld",
@@ -17,25 +18,7 @@
                 "--addOrigin",
                 "${workspaceFolder}/resources/assets",
             ],
-            "console": "internalConsole",
-            "internalConsoleOptions": "openOnSessionStart",
-        },
-        {
-            "name": "Launch Client (.NET)",
-            "type": "coreclr",
-            "request": "launch",
-            "preLaunchTask": "Build (Debug)",
-            "program": "${env:VINTAGE_STORY}/Vintagestory.exe",
-            "args": [
-                "--playStyle",
-                "preset-surviveandbuild",
-                "--openWorld",
-                "modding test world",
-                "--addModPath",
-                "${workspaceFolder}/bin/Debug",
-                "--addOrigin",
-                "${workspaceFolder}/resources/assets",
-            ],
+            "cwd": "${env:VINTAGE_STORY}",
             "console": "internalConsole",
             "internalConsoleOptions": "openOnSessionStart",
         }
