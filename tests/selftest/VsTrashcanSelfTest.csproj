@@ -1,9 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
+    <!--
+        Test-only mod, loaded next to VsTrashcan by tests/smoke/server-smoke.sh. On a real dedicated server it checks the
+        filter rule, filter saving and the trash slots against every item and block the game registers. Never shipped.
+    -->
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <!-- The test project lives under tests/ and must not be compiled into the mod -->
-        <DefaultItemExcludes>$(DefaultItemExcludes);tests/**</DefaultItemExcludes>
     </PropertyGroup>
+
+    <ItemGroup>
+        <!-- Private=false: VsTrashcan.dll comes from the real mod zip; a second copy here would fail to load -->
+        <ProjectReference Include="../../VsTrashcan.csproj" Private="false" />
+    </ItemGroup>
 
     <ItemGroup>
         <Reference Include="VintagestoryAPI">
@@ -14,22 +21,13 @@
             <HintPath>$(VINTAGE_STORY)/Mods/VSEssentials.dll</HintPath>
             <Private>False</Private>
         </Reference>
-        <Reference Include="protobuf-net">
-            <HintPath>$(VINTAGE_STORY)/Lib/protobuf-net.dll</HintPath>
-            <Private>False</Private>
-        </Reference>
-        <Reference Include="Cairo">
-            <HintPath>$(VINTAGE_STORY)/Lib/cairo-sharp.dll</HintPath>
+        <Reference Include="VSSurvivalMod">
+            <HintPath>$(VINTAGE_STORY)/Mods/VSSurvivalMod.dll</HintPath>
             <Private>False</Private>
         </Reference>
     </ItemGroup>
 
     <ItemGroup>
-        <InternalsVisibleTo Include="VSTests" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <None Include="LICENSE" CopyToOutputDirectory="PreserveNewest" />
         <None Include="resources/**">
             <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -37,7 +35,6 @@
     </ItemGroup>
 
     <Target Name="Package" AfterTargets="PostBuildEvent">
-        <ZipDirectory DestinationFile="bin/$(Configuration)/$(TargetName).zip" SourceDirectory="$(TargetDir)"
-            Overwrite="true" />
+        <ZipDirectory DestinationFile="bin/$(Configuration)/$(TargetName).zip" SourceDirectory="$(TargetDir)" Overwrite="true" />
     </Target>
 </Project>

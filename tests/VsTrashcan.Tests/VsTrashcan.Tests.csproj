@@ -1,0 +1,54 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <IsPackable>false</IsPackable>
+        <IsTestProject>true</IsTestProject>
+        <!--
+            IPlayer has an `internal` member as of 1.22 (IsInInteractionRangeOf(BlockPos, float)), so no outside assembly can
+            implement IServerPlayer and mocking libraries can't proxy it. VintagestoryAPI grants InternalsVisibleTo("VSTests")
+            for the game's own tests, so this assembly takes that name to be able to write FakeServerPlayer.
+        -->
+        <AssemblyName>VSTests</AssemblyName>
+        <RootNamespace>VsTrashcan.Tests</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.10.1" />
+        <PackageReference Include="xunit" Version="2.9.3" />
+        <PackageReference Include="xunit.runner.visualstudio" Version="4.0.0" />
+        <PackageReference Include="Moq" Version="4.21.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="../../VsTrashcan.csproj" />
+    </ItemGroup>
+
+    <!-- Unlike the mod, the tests run outside the game, so the game assemblies are copied next to them (Private=True) -->
+    <ItemGroup>
+        <Reference Include="VintagestoryAPI">
+            <HintPath>$(VINTAGE_STORY)/VintagestoryAPI.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="VSEssentials">
+            <HintPath>$(VINTAGE_STORY)/Mods/VSEssentials.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="protobuf-net">
+            <HintPath>$(VINTAGE_STORY)/Lib/protobuf-net.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <!-- The game's real crock (BlockCrock) is used to test containers with contents -->
+        <Reference Include="VSSurvivalMod">
+            <HintPath>$(VINTAGE_STORY)/Mods/VSSurvivalMod.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+        <Reference Include="Newtonsoft.Json">
+            <HintPath>$(VINTAGE_STORY)/Lib/Newtonsoft.Json.dll</HintPath>
+            <Private>True</Private>
+        </Reference>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="../../resources/modinfo.json" Link="modinfo.json" CopyToOutputDirectory="PreserveNewest" />
+    </ItemGroup>
+</Project>
